@@ -71,7 +71,7 @@ const displayMovements = function (movements, sorted = false) {
     //create HTML that will be inserted
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-    <div class="movements__value">${mov}</div>
+    <div class="movements__value">${mov.toFixed(2)}</div>
   </div>`;
 
     //insert HTML
@@ -82,7 +82,7 @@ const displayMovements = function (movements, sorted = false) {
 //calculates the current account balance and sets the balance display
 const calcPrintBalance = function (account) {
   account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.innerHTML = `$${account.balance}`;
+  labelBalance.innerHTML = `$${account.balance.toFixed(2)}`;
 };
 
 //calculates summary values
@@ -90,19 +90,19 @@ const calcDisplaySummary = function (account) {
   const income = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `$${income}`;
+  labelSumIn.textContent = `$${income.toFixed(2)}`;
 
   const out = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = out;
+  labelSumOut.textContent = out.toFixed(2);
 
   const int = account.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * account.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = int;
+  labelSumInterest.textContent = int.toFixed(2);
 };
 
 const updateUI = function (account) {
@@ -173,7 +173,7 @@ btnTransfer.addEventListener('click', function (e) {
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(Number(inputLoanAmount.value));
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     currentAccount.movements.push(amount);
     updateUI(currentAccount);
